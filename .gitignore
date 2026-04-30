@@ -1,0 +1,27 @@
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.ipynb_checkpoints/
+.DS_Store
+
+# Data and results
+data/*.parquet
+data/*.csv
+results/
+logs/
+
+# Environments
+.venv/
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Files
+conftest.py
+RUNBOOK.md
+reinforcement_learning_guia.md

@@ -1,0 +1,40 @@
+# src/configs/intermediate.yaml
+run_name: intermediate
+markets: [DJIA]
+variants: [V0, V1, V4]
+markets: [DJIA]
+seeds: [0, 1, 2, 3, 4]
+
+walkforward:
+  train_years: 4
+  val_years: 1
+  test_years: 1
+  step_years: 1
+
+state_window_length: 60
+evt_window: 250
+transaction_cost: 0.001
+max_episode_length: 252
+
+ppo:
+  total_timesteps: 100000
+  learning_rate: 0.0003
+  n_steps: 2048
+  batch_size: 64
+  n_epochs: 10
+  gamma: 0.99
+  gae_lambda: 0.95
+  clip_range: 0.2
+  ent_coef: 0.005
+  vf_coef: 0.5
+  max_grad_norm: 0.5
+  device: cpu
+  verbose: 0
+  policy_kwargs:
+    net_arch:
+      pi: [128, 128]
+      vf: [128, 128]
+
+output_dir: results
+n_eval_rollouts: 1
+save_per_fold_outputs: true
