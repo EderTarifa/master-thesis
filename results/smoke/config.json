@@ -1,0 +1,54 @@
+{
+  "run_name": "smoke",
+  "markets": [
+    "DJIA"
+  ],
+  "variants": [
+    "V1",
+    "V4"
+  ],
+  "seeds": [
+    0,
+    1
+  ],
+  "walkforward": {
+    "train_years": 2,
+    "val_years": 1,
+    "test_years": 1,
+    "step_years": 2
+  },
+  "state_window_length": 20,
+  "evt_window": 120,
+  "transaction_cost": 0.001,
+  "max_episode_length": 120,
+  "ppo": {
+    "total_timesteps": 20000,
+    "learning_rate": 0.0003,
+    "n_steps": 512,
+    "batch_size": 32,
+    "n_epochs": 10,
+    "gamma": 0.99,
+    "gae_lambda": 0.95,
+    "clip_range": 0.2,
+    "ent_coef": 0.005,
+    "vf_coef": 0.5,
+    "max_grad_norm": 0.5,
+    "policy_kwargs": {
+      "net_arch": {
+        "pi": [
+          128,
+          128
+        ],
+        "vf": [
+          128,
+          128
+        ]
+      }
+    },
+    "verbose": 0,
+    "device": "cpu"
+  },
+  "output_dir": "results",
+  "n_eval_rollouts": 5,
+  "save_per_fold_outputs": true
+}

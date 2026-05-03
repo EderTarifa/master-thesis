@@ -1,0 +1,10 @@
+market,regime,n,mean_diff,median_diff,pct_V4_better
+DJIA,benign,40,-0.00699,-0.00579,82.5
+DJIA,moderate,10,-0.01448,-0.01661,90.0
+DJIA,crisis,10,-0.00823,-0.00997,70.0
+IBEX,benign,20,-0.01211,-0.01156,85.0
+IBEX,moderate,25,-0.0104,-0.00832,88.0
+IBEX,crisis,15,-0.01212,-0.00713,66.66667
+SP50,benign,40,-0.00369,-0.00314,77.5
+SP50,moderate,10,-0.00113,-0.00203,70.0
+SP50,crisis,10,-0.00455,-0.00493,60.0

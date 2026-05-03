@@ -8,8 +8,6 @@ __pycache__/
 # Data and results
 data/*.parquet
 data/*.csv
-results/
-logs/
 
 # Environments
 .venv/

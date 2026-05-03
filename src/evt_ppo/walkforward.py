@@ -70,7 +70,9 @@ def generate_splits(
         test_end = test_start + pd.DateOffset(years=cfg.test_years) - pd.Timedelta(days=1)
 
         if test_end > end:
-            break
+            if test_start > end:
+                break
+            test_end = end
 
         splits.append(WalkForwardSplit(
             fold_id=fold,
