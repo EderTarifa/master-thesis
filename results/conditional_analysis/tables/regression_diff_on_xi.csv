@@ -1,0 +1,6 @@
+model,term,coef,se,t,p,r2
+diff ~ xi,intercept,-0.00761,0.0009,-8.42236,0.0,0.00129
+diff ~ xi,fold_xi,0.00248,0.00518,0.4787,0.63274,0.00129
+diff ~ xi + kurt,intercept,-0.00801,0.00153,-5.24955,0.0,0.00189
+diff ~ xi + kurt,fold_xi,0.00091,0.00706,0.12955,0.89707,0.00189
+diff ~ xi + kurt,fold_kurtosis,0.00012,0.00038,0.32629,0.74459,0.00189
