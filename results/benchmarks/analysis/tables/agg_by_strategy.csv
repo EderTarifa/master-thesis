@@ -1,0 +1,5 @@
+strategy,mdd_mean,mdd_std,cagr_mean,sharpe_mean,sortino_mean,calmar_mean,cdar_95_mean,turnover_mean,n
+buy_and_hold_equal,0.1227,0.081,0.1698,1.2621,1.7256,2.6354,0.1,0.0,39
+equal_weight,0.1223,0.0825,0.1653,1.253,1.7128,2.6339,0.1,0.0452,39
+mean_variance,0.158,0.0893,0.2306,1.0432,1.543,2.3816,0.1331,0.2705,39
+min_variance,0.1052,0.0695,0.1196,1.0649,1.5774,2.1217,0.0879,0.1,39

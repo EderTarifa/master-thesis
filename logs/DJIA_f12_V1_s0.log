@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/home/eder/projects/master-thesis/scripts/run_one.py", line 67, in <module>
+    main()
+  File "/home/eder/projects/master-thesis/scripts/run_one.py", line 49, in main
+    split = splits[args.fold]
+            ~~~~~~^^^^^^^^^^^
+IndexError: list index out of range

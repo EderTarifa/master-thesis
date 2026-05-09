@@ -1,0 +1,13 @@
+market,strategy,mdd_mean,cagr_mean,calmar_mean,n
+DJIA,buy_and_hold_equal,0.1101,0.1612,2.8928,13
+DJIA,equal_weight,0.1103,0.1613,2.9248,13
+DJIA,mean_variance,0.1392,0.1793,2.6637,13
+DJIA,min_variance,0.102,0.1044,2.2289,13
+IBEX,buy_and_hold_equal,0.1511,0.1671,1.602,13
+IBEX,equal_weight,0.1496,0.1563,1.5474,13
+IBEX,mean_variance,0.1653,0.2001,1.9839,13
+IBEX,min_variance,0.1129,0.1324,1.8326,13
+SP50,buy_and_hold_equal,0.1069,0.1811,3.4113,13
+SP50,equal_weight,0.107,0.1782,3.4295,13
+SP50,mean_variance,0.1695,0.3124,2.4973,13
+SP50,min_variance,0.1007,0.1219,2.3036,13
