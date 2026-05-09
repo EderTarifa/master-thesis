@@ -81,6 +81,9 @@ def compute_reward(
         Past drawdowns, used by V3/V4 for the EVT-CVaR term. Should
         include DD_{t+1} as the last element.
     cfg : RewardConfig
+    cached_cvar_dd : float | None
+        Precomputed CVaR-DD value (from environment cache). Only used
+        by V3/V4. If None, it will be computed on the fly.
 
     Returns
     -------
@@ -94,20 +97,22 @@ def compute_reward(
         "evt_cvar_penalty": 0.0,
     }
 
+    # V0: pure log-return, no penalties.
     if cfg.variant == "V0":
         return float(log_return), components
 
-    # V1, V2, V3, V4 all include the quadratic drawdown penalty.
+    # V1, V2, V3, V4: quadratic drawdown penalty (controlled by lambda_dd).
     dd_penalty = cfg.lambda_dd * (new_dd ** 2)
     components["dd_penalty"] = float(dd_penalty)
 
-    if cfg.variant in ("V3", "V4"):
+    # V0, V1, V2: no EVT-CVaR term in reward (lambda_evt = 0 by design).
+    # V3, V4: add the EVT-CVaR-DD regularizer.
+    evt_penalty = 0.0
+    if cfg.lambda_evt > 0:
         cvar_dd = cached_cvar_dd if cached_cvar_dd is not None \
                   else _evt_cvar_drawdown(drawdown_history, cfg)
+        evt_penalty = cfg.lambda_evt * cvar_dd
 
-    # V3 and V4: add the EVT-CVaR-DD term.
-    cvar_dd = _evt_cvar_drawdown(drawdown_history, cfg)
-    evt_penalty = cfg.lambda_evt * cvar_dd
     components["evt_cvar_penalty"] = float(evt_penalty)
     reward = log_return - dd_penalty - evt_penalty
     return float(reward), components

@@ -67,7 +67,7 @@ VARIANT_PRESETS = {
            "reward_variant": "V0"},
     "V1": {"include_evt": False, "lambda_dd": 2.0, "lambda_evt": 0.0,
            "reward_variant": "V1"},
-    "V2": {"include_evt": True,  "lambda_dd": 0.0, "lambda_evt": 2.0,
+    "V2": {"include_evt": True,  "lambda_dd": 2.0, "lambda_evt": 0.0,
            "reward_variant": "V2"},
     "V3": {"include_evt": False, "lambda_dd": 2.0, "lambda_evt": 2.0,
            "reward_variant": "V3"},
