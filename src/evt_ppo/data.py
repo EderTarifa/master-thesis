@@ -10,6 +10,15 @@ would use point-in-time membership to avoid survivorship bias):
 - SP50: 50 most-liquid S&P 500 components (subset to keep dimensionality
   manageable; full S&P 500 is 500 names).
 - IBEX: ~35 components of the IBEX 35 index (Spain).
+- BRD_CMDY: universo broad-commodity vía ETFs líquidos cubriendo cuatro 
+    sub-sectores (energía, metales preciosos, metales industriales, agricultura)
+    y agregados.
+- CRYPTO: 14 cryptocurrencies con histórico fiable desde 2017-01-01.
+    Excluimos stablecoins (USDT, USDC) por construcción y altcoins post-2018
+    (SOL, ADA mainnet 2020, AVAX, MATIC, etc.)
+- BOND_US: universo de fixed-income vía ETFs cubriendo curva de Treasuries,
+    crédito IG/HY, TIPS, agregados y deuda emergente.
+- FX_MIX: universo de divisas con mezcla de G10 majors, crosses, emergentes y asiáticas.
 
 Usage
 -----
@@ -33,6 +42,7 @@ import pandas as pd
 # Universe definitions
 # ---------------------------------------------------------------------------
 
+'''
 DJIA_TICKERS: tuple[str, ...] = (
     "AAPL", "AMGN", "AMZN", "AXP", "BA", "CAT", "CRM", "CSCO", "CVX", "DIS",
     "GS", "HD", "HON", "IBM", "JNJ", "JPM", "KO", "MCD", "MMM", "MRK",
@@ -62,6 +72,155 @@ UNIVERSES: dict[str, tuple[str, ...]] = {
     "DJIA": DJIA_TICKERS,
     "SP50": SP50_TICKERS,
     "IBEX": IBEX_TICKERS,
+}
+
+HSI_TICKERS: tuple[str, ...] = (
+    "0001.HK", "0002.HK", "0003.HK", "0005.HK", "0006.HK",
+    "0012.HK", "0016.HK", "0017.HK", "0019.HK",
+    "0023.HK", "0066.HK", "0083.HK", "0101.HK", "0151.HK",
+    "0175.HK", "0267.HK", "0291.HK", "0293.HK", "0386.HK",
+    "0388.HK", "0688.HK", "0700.HK", "0762.HK", "0857.HK",
+    "0883.HK", "0939.HK", "0941.HK", "0992.HK", "1038.HK",
+    "1088.HK", "1113.HK", "1398.HK", "2318.HK", "2388.HK",
+    "2628.HK", "3328.HK", "3988.HK",
+)
+
+UNIVERSES: dict[str, tuple[str, ...]] = {
+    "HSI":  HSI_TICKERS,
+}
+'''
+
+BRD_CMDY_TICKERS: tuple[str, ...] = (
+    # Energía
+    "USO",    # WTI crude oil
+    "BNO",    # Brent crude oil
+    "UNG",    # Henry Hub natural gas
+    "UGA",    # gasoline RBOB
+    "UHN",    # heating oil / ULSD
+    "USL",    # 12-month WTI (mitigates contango)
+    "DBO",    # oil oversampled (rolling)
+    # Metales preciosos
+    "GLD",    # gold (SPDR)
+    "SLV",    # silver
+    "PPLT",   # platinum
+    "PALL",   # palladium
+    # Metales industriales
+    "CPER",   # copper
+    "DBB",    # base metals broad
+    # Agricultura — soft and grains
+    "CORN",   # corn
+    "WEAT",   # wheat
+    "SOYB",   # soybeans
+    "CANE",   # sugar
+    "DBA",    # agriculture broad
+    # Broad / diversificados (sirven de "market proxies")
+    "DBC",    # Invesco DB Commodity Index Tracking
+    "GSG",    # iShares S&P GSCI commodity
+    "COMT",   # iShares GSCI commodity dynamic roll
+    "BCI",    # Aberdeen Standard Bloomberg
+    "PDBC",   # Invesco Optimum Yield diversified (no K-1)
+    "FTGC",   # First Trust Global Tactical
+    "DBE",    # Invesco DB Energy diversified
+)
+
+CRYPTO_TICKERS: tuple[str, ...] = (
+    "BTC-USD",   # Bitcoin
+    "ETH-USD",   # Ethereum
+    "XRP-USD",   # Ripple
+    "LTC-USD",   # Litecoin
+    "BCH-USD",   # Bitcoin Cash
+    "DOGE-USD",  # Dogecoin
+    "XLM-USD",   # Stellar
+    "XMR-USD",   # Monero
+    "ETC-USD",   # Ethereum Classic
+    "DASH-USD",  # Dash
+    "ZEC-USD",   # Zcash
+    "NEO-USD",   # NEO
+    "TRX-USD",   # Tron (lanzado 2017)
+    "EOS-USD",   # EOS (lanzado 2017)
+)
+
+BOND_US_TICKERS: tuple[str, ...] = (
+    # Treasury — curva completa
+    "SHV",    # 0-1 año
+    "SHY",    # 1-3 años
+    "IEI",    # 3-7 años
+    "IEF",    # 7-10 años
+    "TLH",    # 10-20 años
+    "TLT",    # 20+ años
+    "VGSH",   # Vanguard short-term Treasury
+    "VGIT",   # Vanguard intermediate-term Treasury
+    "VGLT",   # Vanguard long-term Treasury
+    # Crédito investment grade
+    "LQD",    # iShares iBoxx IG corporate
+    "VCSH",   # short-term IG corporate
+    "VCIT",   # intermediate-term IG
+    "VCLT",   # long-term IG
+    "MBB",    # mortgage-backed securities
+    # Crédito high yield
+    "HYG",    # iShares iBoxx HY
+    "JNK",    # SPDR Bloomberg HY
+    "SHYG",   # short-duration HY
+    # TIPS (inflation-protected)
+    "TIP",    # iShares broad TIPS
+    "STIP",   # short TIPS
+    "SCHP",   # Schwab broad TIPS
+    # Agregados
+    "AGG",    # iShares core US aggregate
+    "BND",    # Vanguard total bond market
+    "GVI",    # intermediate gov/credit
+    # Sovereign global / EM
+    "BWX",    # SPDR Barclays international Treasury (ex-US)
+    "EMB",    # iShares JPM EM bonds (USD-denominated)
+    "EMLC",   # VanEck JPM EM local currency bonds
+    "PCY",    # Invesco emerging markets sovereign
+)
+
+FX_MIX_TICKERS: tuple[str, ...] = (
+    # --- G10 majors (10) ---
+    "EURUSD=X",   # Euro
+    "GBPUSD=X",   # Libra esterlina
+    "USDJPY=X",   # Yen japones
+    "USDCHF=X",   # Franco suizo (refugio)
+    "USDCAD=X",   # Dolar canadiense
+    "AUDUSD=X",   # Dolar australiano
+    "NZDUSD=X",   # Dolar neozelandes
+    "USDSEK=X",   # Corona sueca
+    "USDNOK=X",   # Corona noruega
+    "USDDKK=X",   # Corona danesa
+    # --- Major crosses (5) ---
+    "EURJPY=X",
+    "EURGBP=X",
+    "GBPJPY=X",
+    "AUDJPY=X",
+    "EURCHF=X",
+    # --- Emerging markets crisis-prone (8) ---
+    "USDMXN=X",   # Peso mexicano
+    "USDBRL=X",   # Real brasileno
+    "USDZAR=X",   # Rand sudafricano
+    "USDTRY=X",   # Lira turca (cola muy pesada)
+    "USDPLN=X",   # Zloty polaco
+    "USDHUF=X",   # Forinto hungaro
+    "USDINR=X",   # Rupia india
+    "USDPHP=X",   # Peso filipino
+    # --- Asia liquid (4) ---
+    "USDCNY=X",   # Yuan onshore (managed float)
+    "USDSGD=X",   # Dolar singapur
+    "USDKRW=X",   # Won surcoreano
+    "USDTWD=X",   # Dolar taiwanes
+    # --- Opcional (descomentar si interesa) ---
+    # "USDRUB=X",   # Rublo ruso (split estructural feb 2022)
+    # "USDIDR=X",   # Rupia indonesia
+    # "USDTHB=X",   # Baht tailandes
+    # "USDCLP=X",   # Peso chileno
+)
+
+UNIVERSES: dict[str, tuple[str, ...]] = {
+    # Cross-asset (generalización sectorial)
+    "BRD_CMDY": BRD_CMDY_TICKERS,
+    "CRYPTO":   CRYPTO_TICKERS,
+    "BOND_US":  BOND_US_TICKERS,
+    "FX_MIX":   FX_MIX_TICKERS,
 }
 
 
@@ -113,7 +272,7 @@ def download_universe(
     return clean_prices(prices)
 
 
-def clean_prices(prices: pd.DataFrame, max_missing_frac: float = 0.05) -> pd.DataFrame:
+def clean_prices(prices: pd.DataFrame, max_missing_frac: float = 0.05) -> pd.DataFrame: # minimum 95% data completeness per ticker!!
     """Drop tickers with too many missing values, forward-fill the rest.
 
     Parameters

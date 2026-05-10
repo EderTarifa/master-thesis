@@ -56,6 +56,10 @@ def main():
     prices = load_local(f"data/{args.market}.parquet")
     log_ret = prices_to_log_returns(prices).dropna(how="any")
     splits = generate_splits(log_ret.index, exp.walkforward)
+    if args.fold >= len(splits):
+        logging.info(f"SKIP: market={args.market} fold={args.fold} "
+                    f"out of range ({len(splits)} folds available)")
+        return
     split = splits[args.fold]
 
     train = log_ret.loc[split.train_start:split.val_end].values

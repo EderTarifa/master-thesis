@@ -8,9 +8,9 @@ RUN_NAME = "full_optimal"
 ROWS_DIR = f"results/{RUN_NAME}/rows"
 
 # 3 mercados × 13 folds × 5 variantes × 5 seeds = 975
-TOTAL_TASKS = 3 * 13 * 5 * 5
+TOTAL_TASKS = 13 * 5 * 5 # 3 * 13 * 5 * 5
 
-files = sorted(glob.glob(f"{ROWS_DIR}/*.parquet"))
+files = sorted(glob.glob(f"{ROWS_DIR}/FX_*.parquet"))
 print(f"{'='*60}")
 print(f"Progreso: {len(files)} / {TOTAL_TASKS} tareas ({100*len(files)/TOTAL_TASKS:.1f}%)")
 print(f"{'='*60}")

@@ -1,0 +1,42 @@
+# src/configs/full_optimal_crypto.yaml
+# Universo cryptocurrencies. AJUSTE METODOLÓGICO:
+# La disponibilidad de histórico fiable pre-2017 es limitada para la mayoría
+# de altcoins (ETH desde 2015, XLM 2014, ZEC 2016, EOS/TRX 2017). Para
+# preservar un universo de >=12 activos, los datos arrancan en 2017-01-01.
+# Con un walkforward 4-1-1-1 obtendríamos solo 3 folds; reducimos a 3-1-1-1
+# para obtener 4-5 folds y mantener potencia estadística razonable.
+# Esta decisión se documenta en el capítulo correspondiente de la memoria.
+run_name: full_optimal
+markets: [CRYPTO]
+variants: [V0, V1, V2, V3, V4]
+seeds: [0, 1, 2, 3, 4]
+walkforward:
+  train_years: 3       # <-- reducido de 4 por menor histórico disponible
+  val_years: 1
+  test_years: 1
+  step_years: 1
+state_window_length: 60
+evt_window: 250
+transaction_cost: 0.001
+max_episode_length: 252
+ppo:
+  total_timesteps: 100000
+  learning_rate: 0.0003
+  n_steps: 2048
+  batch_size: 64
+  n_epochs: 10
+  gamma: 0.99
+  gae_lambda: 0.95
+  clip_range: 0.2
+  ent_coef: 0.005
+  vf_coef: 0.5
+  max_grad_norm: 0.5
+  device: cpu
+  verbose: 0
+  policy_kwargs:
+    net_arch:
+      pi: [128, 128]
+      vf: [128, 128]
+output_dir: results
+n_eval_rollouts: 1
+save_per_fold_outputs: true

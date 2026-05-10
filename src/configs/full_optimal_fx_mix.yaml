@@ -1,0 +1,46 @@
+# src/configs/full_optimal_fx_mix.yaml
+# Universo FX (G10 majors + crosses + EM + Asia liquid).
+# Walkforward 4-1-1 estandar: los pares mayores tienen historico desde
+# 2003-2004 en Yahoo, suficiente para los 13 folds completos (test
+# 2013-2025).
+#
+# NOTA SOBRE TRANSACTION_COST: en FX real los spreads son mas estrechos
+# (1-3 bps en majors, 5-15 bps en EMs) que el 10 bps usado en el resto
+# del estudio. Mantenemos 0.001 por consistencia metodologica con DJIA/
+# SP50/IBEX/HSI/BRD_CMDY/CRYPTO/BOND_US: esto perjudica ligeramente
+# las metricas absolutas en FX pero permite comparacion limpia entre
+# clases. Mencionar este punto en la memoria.
+run_name: full_optimal
+markets: [FX_MIX]
+variants: [V0, V1, V2, V3, V4]
+seeds: [0, 1, 2, 3, 4]
+walkforward:
+  train_years: 4
+  val_years: 1
+  test_years: 1
+  step_years: 1
+state_window_length: 60
+evt_window: 250
+transaction_cost: 0.001
+max_episode_length: 252
+ppo:
+  total_timesteps: 100000
+  learning_rate: 0.0003
+  n_steps: 2048
+  batch_size: 64
+  n_epochs: 10
+  gamma: 0.99
+  gae_lambda: 0.95
+  clip_range: 0.2
+  ent_coef: 0.005
+  vf_coef: 0.5
+  max_grad_norm: 0.5
+  device: cpu
+  verbose: 0
+  policy_kwargs:
+    net_arch:
+      pi: [128, 128]
+      vf: [128, 128]
+output_dir: results
+n_eval_rollouts: 1
+save_per_fold_outputs: true
