@@ -42,7 +42,7 @@ import pandas as pd
 # Universe definitions
 # ---------------------------------------------------------------------------
 
-'''
+
 DJIA_TICKERS: tuple[str, ...] = (
     "AAPL", "AMGN", "AMZN", "AXP", "BA", "CAT", "CRM", "CSCO", "CVX", "DIS",
     "GS", "HD", "HON", "IBM", "JNJ", "JPM", "KO", "MCD", "MMM", "MRK",
@@ -84,11 +84,6 @@ HSI_TICKERS: tuple[str, ...] = (
     "1088.HK", "1113.HK", "1398.HK", "2318.HK", "2388.HK",
     "2628.HK", "3328.HK", "3988.HK",
 )
-
-UNIVERSES: dict[str, tuple[str, ...]] = {
-    "HSI":  HSI_TICKERS,
-}
-'''
 
 BRD_CMDY_TICKERS: tuple[str, ...] = (
     # Energía
@@ -217,6 +212,10 @@ FX_MIX_TICKERS: tuple[str, ...] = (
 
 UNIVERSES: dict[str, tuple[str, ...]] = {
     # Cross-asset (generalización sectorial)
+    "DJIA": DJIA_TICKERS,
+    "IBEX": IBEX_TICKERS,
+    "SP50": SP50_TICKERS,
+    "HSI": HSI_TICKERS,
     "BRD_CMDY": BRD_CMDY_TICKERS,
     "CRYPTO":   CRYPTO_TICKERS,
     "BOND_US":  BOND_US_TICKERS,

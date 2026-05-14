@@ -181,24 +181,24 @@ def extension_hypothesis_tests(runs: pd.DataFrame, out_dir: Path) -> pd.DataFram
     contrasts = [("V0", "V1"), ("V1", "V2"), ("V1", "V3"), ("V1", "V4"),
                  ("V2", "V4"), ("V3", "V4")]
     for baseline, treatment in contrasts:
-        if not {baseline, treatment}.issubset(extension["variant"].unique()):
-            continue
-        for market in sorted(extension["market"].unique()):
-            sub = extension[extension["market"] == market]
-            paired = paired_table(sub, baseline=baseline, treatment=treatment)
-            if len(paired) < 5:
-                continue
-            result = full_comparison(
-                paired[baseline].values, paired[treatment].values,
-                alpha=0.05, n_bootstrap=5000, seed=0,
-            )
-            rows.append({
-                "market": market,
-                "asset_class": ASSET_CLASS.get(market, "Unknown"),
-                "baseline": baseline,
-                "treatment": treatment,
-                **result,
-            })
+            for market in sorted(extension["market"].unique()):
+                sub = extension[extension["market"] == market]
+                if not {baseline, treatment}.issubset(sub["variant"].unique()):
+                    continue
+                paired = paired_table(sub, baseline=baseline, treatment=treatment)
+                if len(paired) < 5:
+                    continue
+                result = full_comparison(
+                    paired[baseline].values, paired[treatment].values,
+                    alpha=0.05, n_bootstrap=5000, seed=0,
+                )
+                rows.append({
+                    "market": market,
+                    "asset_class": ASSET_CLASS.get(market, "Unknown"),
+                    "baseline": baseline,
+                    "treatment": treatment,
+                    **result,
+                })
     df = pd.DataFrame(rows)
     df.to_csv(out_dir / "hypothesis_tests_extension.csv", index=False)
     return df

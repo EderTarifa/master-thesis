@@ -8,7 +8,7 @@ def borrar_sin_v2(ruta: str):
 
     borrados = 0
     for f in base.rglob("*"):
-        if f.is_file() and "V2" not in f.name:
+        if f.is_file() and "FX" not in f.name:
             f.unlink()
             borrados += 1
 
