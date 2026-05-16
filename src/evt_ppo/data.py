@@ -188,7 +188,7 @@ FX_MIX_TICKERS: tuple[str, ...] = (
     "EURGBP=X",
     "GBPJPY=X",
     "AUDJPY=X",
-    "EURCHF=X",
+    #"EURCHF=X",  # peg roto 2015, no es comparable al resto del periodo
     # --- Emerging markets crisis-prone (8) ---
     "USDMXN=X",   # Peso mexicano
     "USDBRL=X",   # Real brasileno
@@ -199,10 +199,11 @@ FX_MIX_TICKERS: tuple[str, ...] = (
     "USDINR=X",   # Rupia india
     "USDPHP=X",   # Peso filipino
     # --- Asia liquid (4) ---
-    "USDCNY=X",   # Yuan onshore (managed float)
+    #"USDCNY=X",   # Yuan onshore (managed float), managed float, no es FX libre
+
     "USDSGD=X",   # Dolar singapur
     "USDKRW=X",   # Won surcoreano
-    "USDTWD=X",   # Dolar taiwanes
+    #"USDTWD=X",   # Dolar taiwanes, # errores de datos masivos en Yahoo (2011, 2014)
     # --- Opcional (descomentar si interesa) ---
     # "USDRUB=X",   # Rublo ruso (split estructural feb 2022)
     # "USDIDR=X",   # Rupia indonesia
