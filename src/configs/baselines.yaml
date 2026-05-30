@@ -1,0 +1,62 @@
+# src/configs/baselines.yaml
+#
+# Configuration for the baseline competitors (POTPG, EXDRL) compared
+# head-to-head against V4 PPO. Baselines share V4's state + reward;
+# only the learning algorithm changes.
+#
+# Hardware target: NVIDIA RTX 3060 Ti (8 GB VRAM), CUDA 13.2.
+
+run_name: baselines_optimal
+markets: [DJIA, SP50, IBEX]
+baseline_names: [POTPG, EXDRL]
+seeds: [0, 1, 2, 3, 4]
+
+walkforward:
+  train_years: 4
+  val_years: 1
+  test_years: 1
+  step_years: 1
+
+state_window_length: 60
+evt_window: 250
+transaction_cost: 0.001
+max_episode_length: 252
+
+# ---- Algorithm-specific hyperparameters ----
+baselines:
+  POTPG:
+    total_timesteps: 200000
+    n_trajectories_per_batch: 64
+    learning_rate: 0.0003
+    q_threshold: 0.90
+    alpha_cvar: 0.95
+    hidden_dim: 128
+    n_hidden_layers: 2
+    grad_clip: 0.5
+    min_excesses_for_gpd: 5
+    device: cpu
+    verbose: 0
+
+  EXDRL:
+    total_timesteps: 100000
+    n_quantiles: 51
+    tail_threshold_q: 0.90
+    gpd_consistency_weight: 0.5
+    gpd_refit_every: 200
+    alpha_cvar_objective: 0.95
+    actor_lr: 0.0003
+    critic_lr: 0.0003
+    gamma: 0.99
+    tau: 0.005
+    batch_size: 256
+    buffer_size: 100000
+    warmup_steps: 1000
+    hidden_dim: 128
+    n_hidden_layers: 2
+    action_noise_std: 0.1
+    grad_clip: 1.0
+    device: cpu
+    verbose: 0
+
+output_dir: results
+save_per_fold_outputs: false

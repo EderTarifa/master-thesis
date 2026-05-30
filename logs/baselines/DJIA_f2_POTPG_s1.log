@@ -1,0 +1,3 @@
+2026-05-24 11:50:58,917 [INFO] Building POTPG on DJIA fold 2 seed 1 (state=1776, action=29)
+2026-05-24 13:31:13,674 [INFO] POTPG training done in 6012.7s
+2026-05-24 13:31:16,487 [INFO] Wrote results/baselines/rows/DJIA_f02_POTPG_s1.parquet

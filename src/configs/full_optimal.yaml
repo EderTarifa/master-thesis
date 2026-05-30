@@ -2,7 +2,7 @@
 run_name: full_optimal
 markets: [DJIA, SP50, IBEX]
 variants: [V0, V1, V2, V3, V4]
-seeds: [0, 1, 2, 3, 4]
+seeds: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] # Extendemos 5 seeds más
 walkforward:
   train_years: 4
   val_years: 1

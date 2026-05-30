@@ -1,0 +1,3 @@
+2026-05-25 07:58:44,318 [INFO] Building POTPG on IBEX fold 11 seed 0 (state=1715, action=28)
+2026-05-25 09:38:36,803 [INFO] POTPG training done in 5991.4s
+2026-05-25 09:38:38,245 [INFO] Wrote results/baselines/rows/IBEX_f11_POTPG_s0.parquet

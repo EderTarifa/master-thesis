@@ -1,0 +1,3 @@
+2026-05-24 21:53:27,389 [INFO] Building POTPG on SP50 fold 5 seed 4 (state=2813, action=46)
+2026-05-24 23:35:25,129 [INFO] POTPG training done in 6116.7s
+2026-05-24 23:35:27,571 [INFO] Wrote results/baselines/rows/SP50_f05_POTPG_s4.parquet

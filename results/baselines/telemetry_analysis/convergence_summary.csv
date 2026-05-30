@@ -1,0 +1,7 @@
+variant,market,n_runs,action_dim,approx_kl_per_dim_final_mean,approx_kl_per_dim_final_std,approx_kl_per_dim_var_ratio
+EXDRL,DJIA,5,29,,,
+EXDRL,IBEX,5,28,,,
+EXDRL,SP50,5,46,,,
+POTPG,DJIA,5,29,,,
+POTPG,IBEX,5,28,,,
+POTPG,SP50,5,46,,,

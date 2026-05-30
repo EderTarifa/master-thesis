@@ -1,0 +1,2 @@
+baseline,n_runs,n_snapshots_total,critic_decreased_runs,critic_decreased_pct,critic_loss_reduction_mean,qr_loss_reduction_mean,gpd_xi_mean,gpd_xi_min,gpd_xi_max,gpd_sigma_mean
+EXDRL,195,19500,106,54.4,-1.9573,-1.2081,-0.1644,-0.5,0.2884,0.177

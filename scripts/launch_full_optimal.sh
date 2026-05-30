@@ -7,13 +7,13 @@ set -euo pipefail
 export LC_ALL=C
 export LANG=C
 
-JOBS="${1:-13}"
+JOBS="${1:-15}"
 CONFIG="${2:-src/configs/full_optimal.yaml}"
 RUN_NAME="full_optimal"
 
 MARKETS=(DJIA SP50 IBEX)
-VARIANTS=(V0 V1 V2 V3 V4)
-SEEDS=(0 1 2 3 4)
+VARIANTS=(V0 V4) # Telemetry version # VARIANTS=(V0 V1 V2 V3 V4)
+SEEDS=(5 6 7 8 9) #SEEDS=(0 1 2 3 4 5 6 7 8 9)
 N_FOLDS=13
 
 TOTAL_TASKS=$((${#MARKETS[@]} * N_FOLDS * ${#VARIANTS[@]} * ${#SEEDS[@]}))
@@ -23,10 +23,11 @@ echo "Parallel jobs: ${JOBS}"
 echo "Total tasks: ${TOTAL_TASKS}"
 
 parallel --jobs "$JOBS" --bar --joblog "logs/${RUN_NAME}/parallel.log" \
-  python scripts/run_one.py \
+  python scripts/run_one_with_telemetry.py \
     --config "${CONFIG}" \
     --market {1} --fold {2} --variant {3} --seed {4} \
     --out "results/${RUN_NAME}" \
+    --telemetry \
     ">" "logs/${RUN_NAME}/{1}_f{2}_{3}_s{4}.log" "2>&1" \
   ::: "${MARKETS[@]}" \
   ::: $(seq 0 $((N_FOLDS-1))) \

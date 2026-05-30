@@ -1,0 +1,3 @@
+2026-05-26 03:57:21,533 [INFO] Building EXDRL on DJIA fold 6 seed 4 (state=1776, action=29)
+2026-05-26 07:53:28,412 [INFO] EXDRL training done in 14164.8s
+2026-05-26 07:53:31,907 [INFO] Wrote results/baselines/rows/DJIA_f06_EXDRL_s4.parquet

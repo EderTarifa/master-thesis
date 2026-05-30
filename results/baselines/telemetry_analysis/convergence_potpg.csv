@@ -1,0 +1,2 @@
+baseline,n_runs,n_iterations_total,fit_mode_gpd,fit_mode_empirical,pct_gpd,gpd_converged_count,gpd_converged_pct,gpd_shape_median,gpd_shape_min,gpd_shape_max,gpd_scale_median,n_excesses_mean
+POTPG,195,2535,2535,0,100.0,2535,100.0,-0.2919,-0.5,0.3205,15.4588,7.0
