@@ -1,5 +1,5 @@
 % Generado por scripts/make_kupiec_table.py -- NO editar a mano
-\begin{table}[ht]
+\begin{table}[h]
   \centering
   \caption{Backtest de cobertura del VaR sobre la cartera 1/N (ventana movil de 500 dias). Convencion: $L_t=-r_t$; una violacion ocurre cuando $L_t>\mathrm{VaR}_\alpha(L)$, con tasa esperada $1-\alpha$. $p_{\mathrm{Kup}}$ es el $p$-valor del test de Kupiec (cobertura incondicional) y $p_{\mathrm{Chr}}$ el de independencia de Christoffersen. \checkmark{} indica no rechazo de calibracion correcta al 5\,\%.}
   \label{tab:kupiec_validation}
@@ -8,24 +8,24 @@
     Mercado & Modelo & $\alpha$ & Viol./$n$ & Tasa & $p_{\mathrm{Kup}}$ & $p_{\mathrm{Chr}}$ \\
     \midrule
     DJIA & Empirico & 95\% & 181/4027 & 4.49\% (esp.\ 5\%) & 0.135\,\checkmark & $<\!10^{-4}$ \\
-     & Normal & 95\% & 3841/4027 & 95.38\% (esp.\ 5\%) & $<\!10^{-4}$\,$\times$ & 0.074 \\
+     & Normal & 95\% & 186/4027 & 4.62\% (esp.\ 5\%) & 0.261\,\checkmark & $<\!10^{-4}$ \\
      & EVT-POT & 95\% & 178/4027 & 4.42\% (esp.\ 5\%) & 0.085\,\checkmark & $<\!10^{-4}$ \\
      & Empirico & 99\% & 58/4027 & 1.44\% (esp.\ 1\%) & 0.008\,$\times$ & $<\!10^{-4}$ \\
-     & Normal & 99\% & 3967/4027 & 98.51\% (esp.\ 1\%) & $<\!10^{-4}$\,$\times$ & 0.002 \\
+     & Normal & 99\% & 97/4027 & 2.41\% (esp.\ 1\%) & $<\!10^{-4}$\,$\times$ & $<\!10^{-4}$ \\
      & EVT-POT & 99\% & 48/4027 & 1.19\% (esp.\ 1\%) & 0.235\,\checkmark & $<\!10^{-4}$ \\
     \midrule
     IBEX & Empirico & 95\% & 198/4099 & 4.83\% (esp.\ 5\%) & 0.617\,\checkmark & $<\!10^{-4}$ \\
-     & Normal & 95\% & 3951/4099 & 96.39\% (esp.\ 5\%) & $<\!10^{-4}$\,$\times$ & $<\!10^{-4}$ \\
+     & Normal & 95\% & 191/4099 & 4.66\% (esp.\ 5\%) & 0.312\,\checkmark & $<\!10^{-4}$ \\
      & EVT-POT & 95\% & 198/4099 & 4.83\% (esp.\ 5\%) & 0.617\,\checkmark & $<\!10^{-4}$ \\
      & Empirico & 99\% & 45/4099 & 1.10\% (esp.\ 1\%) & 0.535\,\checkmark & 0.001 \\
-     & Normal & 99\% & 4056/4099 & 98.95\% (esp.\ 1\%) & $<\!10^{-4}$\,$\times$ & -- \\
+     & Normal & 99\% & 71/4099 & 1.73\% (esp.\ 1\%) & $<\!10^{-4}$\,$\times$ & 0.000 \\
      & EVT-POT & 99\% & 43/4099 & 1.05\% (esp.\ 1\%) & 0.754\,\checkmark & 0.010 \\
     \midrule
     SP50 & Empirico & 95\% & 178/4027 & 4.42\% (esp.\ 5\%) & 0.085\,\checkmark & $<\!10^{-4}$ \\
-     & Normal & 95\% & 3848/4027 & 95.56\% (esp.\ 5\%) & $<\!10^{-4}$\,$\times$ & 0.003 \\
+     & Normal & 95\% & 181/4027 & 4.49\% (esp.\ 5\%) & 0.135\,\checkmark & $<\!10^{-4}$ \\
      & EVT-POT & 95\% & 177/4027 & 4.40\% (esp.\ 5\%) & 0.072\,\checkmark & $<\!10^{-4}$ \\
      & Empirico & 99\% & 61/4027 & 1.51\% (esp.\ 1\%) & 0.002\,$\times$ & $<\!10^{-4}$ \\
-     & Normal & 99\% & 3961/4027 & 98.36\% (esp.\ 1\%) & $<\!10^{-4}$\,$\times$ & 0.027 \\
+     & Normal & 99\% & 97/4027 & 2.41\% (esp.\ 1\%) & $<\!10^{-4}$\,$\times$ & $<\!10^{-4}$ \\
      & EVT-POT & 99\% & 52/4027 & 1.29\% (esp.\ 1\%) & 0.075\,\checkmark & $<\!10^{-4}$ \\
     \bottomrule
   \end{tabular}

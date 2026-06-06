@@ -105,13 +105,21 @@ def christoffersen_independence(violations: np.ndarray) -> dict:
     return {"stat": float(lr), "pvalue": float(pvalue)}
 
 
-def normal_var_cvar(returns: np.ndarray, alpha: float) -> tuple[float, float]:
-    """VaR/CVaR paramétrico Normal."""
-    mu, sd = float(returns.mean()), float(returns.std(ddof=1))
-    z_alpha = stats.norm.ppf(alpha)
-    var = -(mu + sd * z_alpha)  # convertir a pérdida (positiva)
+def normal_var_cvar(losses: np.ndarray, alpha: float) -> tuple[float, float]:
+    """VaR/CVaR paramétrico Normal sobre la serie de PÉRDIDAS L = -r.
+
+    Convención (idéntica a empirical_var_cvar y evt_var_cvar): la entrada es la
+    serie de pérdidas L_t = -r_t, y VaR_alpha(L) y CVaR_alpha(L) son POSITIVOS.
+    Para L ~ N(mu, sd^2):
+        VaR_alpha(L)  = mu + sd * z_alpha,                con z_alpha = Phi^{-1}(alpha)
+        CVaR_alpha(L) = mu + sd * phi(z_alpha) / (1 - alpha)
+    Así una violación L_t > VaR_alpha(L) ocurre ~ (1 - alpha) del tiempo.
+    """
+    mu, sd = float(losses.mean()), float(losses.std(ddof=1))
+    z_alpha = stats.norm.ppf(alpha)          # +1.645 (95 %), +2.326 (99 %)
+    var = mu + sd * z_alpha                   # alpha-cuantil de la pérdida (positivo)
     pdf_z = stats.norm.pdf(z_alpha)
-    cvar = -(mu - sd * pdf_z / (1 - alpha))
+    cvar = mu + sd * pdf_z / (1.0 - alpha)
     return float(var), float(cvar)
 
 
