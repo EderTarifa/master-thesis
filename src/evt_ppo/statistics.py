@@ -147,12 +147,15 @@ def full_comparison(
         block_size=block_size, n_resamples=n_bootstrap,
         alpha=alpha, seed=seed,
     )
+    diff = np.asarray(mdd_evt, float).ravel() - np.asarray(mdd_base, float).ravel()
+    win_rate = float(np.mean(diff < 0))   # fracción de pares donde el tratamiento mejora (MDD menor)
     return {
         "n": t_res.n,
         "mean_mdd_base": float(np.mean(mdd_base)),
         "mean_mdd_evt": float(np.mean(mdd_evt)),
         "mean_diff": mean_d,
         "median_diff": float(np.median(np.asarray(mdd_evt) - np.asarray(mdd_base))),
+        "win_rate": win_rate,
         "paired_t_pvalue": t_res.pvalue,
         "paired_t_reject": t_res.reject_h0,
         "wilcoxon_pvalue": w_res.pvalue,

@@ -1,0 +1,4 @@
+usage: run_one_rebalance_frec.py [-h] --market MARKET --fold FOLD --variant
+                                 VARIANT --seed SEED [--config CONFIG]
+                                 [--out OUT]
+run_one_rebalance_frec.py: error: unrecognized arguments: --telemetry

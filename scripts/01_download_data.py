@@ -21,12 +21,12 @@ from evt_ppo import data as D
 
 def main() -> None:
     p = argparse.ArgumentParser()
-    #p.add_argument("--markets", nargs="+", default=["DJIA", "SP50", "IBEX"],
-    #               choices=list(D.UNIVERSES.keys()))
+    p.add_argument("--markets", nargs="+", default=["DJIA", "SP50", "IBEX"],
+                   choices=list(D.UNIVERSES.keys()))
     #p.add_argument("--markets", nargs="+", default=["HSI"],
     #               choices=list(D.UNIVERSES.keys()))
-    p.add_argument("--markets", nargs="+", default=["BRD_CMDY"],
-                    choices=list(D.UNIVERSES.keys()))
+    #p.add_argument("--markets", nargs="+", default=["BRD_CMDY"],
+    #                choices=list(D.UNIVERSES.keys()))
     #p.add_argument("--markets", nargs="+", default=["BRD_CMDY", "CRYPTO", "BOND_US", "FX_MIX"],
     #               choices=list(D.UNIVERSES.keys()))
     p.add_argument("--start", default="2008-01-01")

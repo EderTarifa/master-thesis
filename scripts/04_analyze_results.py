@@ -47,7 +47,7 @@ def hypothesis_test_table(runs: pd.DataFrame, out_dir: Path) -> pd.DataFrame:
     out_dir.mkdir(parents=True, exist_ok=True)
     rows = []
     contrasts = [
-        ("V0", "V1"), ("V1", "V2"), ("V1", "V3"), ("V1", "V4"),
+        ("V0", "V1"), ("V0", "V2"), ("V0", "V3"), ("V0", "V4"), ("V1", "V2"), ("V1", "V3"), ("V1", "V4"),
         ("V2", "V4"), ("V3", "V4"),
     ]
     for baseline, treatment in contrasts:
@@ -85,9 +85,20 @@ def make_global_plots(runs: pd.DataFrame, out_dir: Path) -> None:
     out_dir.mkdir(parents=True, exist_ok=True)
     variants_sorted = sorted(runs["variant"].unique())
 
+    # Episodes per variant (equal across variants by construction) and the
+    # first/last variant ids, used only to build the title string.
+    n_episodes = int(runs.groupby("variant").size().iloc[0])
+    v_first = variants_sorted[0][1:]
+    v_last = variants_sorted[-1][1:]
+    global_title = (
+        rf"$\overline{{\mathrm{{MDD}}}}$ across "
+        rf"$V_{{{v_first}}} \rightarrow V_{{{v_last}}}$ "
+        rf"({n_episodes} episodes per variant)"
+    )
+
     P.plot_mdd_boxplots(
         runs, variant_col="variant", mdd_col="mdd",
-        title="Maximum Drawdown distribution by variant (all markets, all folds, all seeds)",
+        title=global_title,
         save_path=out_dir / "mdd_boxplot_global",
         order=variants_sorted,
     )
@@ -145,15 +156,18 @@ def main() -> None:
     args = p.parse_args()
 
     rd = args.results_dir
-    if not (rd / "runs.parquet").exists():
-        raise SystemExit(f"No runs.parquet in {rd}")
-    runs = pd.read_parquet(rd / "runs.parquet")
+    """     if not ("/home/eder/projects/master-thesis/results/full/runs.parquet").exists():
+        raise SystemExit(f"No runs.parquet in {rd}") """
+    runs = pd.read_parquet("/home/eder/projects/master-thesis/results/full_optimal/runs.parquet")
+    runs = runs[(runs["market"].isin(["DJIA", "SP50", "IBEX"])) & (runs["seed"].isin([0, 1, 2, 3, 4]))]
     bench_path = rd / "benchmarks.parquet"
     bench = pd.read_parquet(bench_path) if bench_path.exists() else None
 
     analysis_dir = rd / "analysis"
     tables_dir = analysis_dir / "tables"
     plots_dir = analysis_dir / "plots"
+
+
 
     print(f"Loaded {len(runs)} runs from {rd}")
     make_aggregated_tables(runs, tables_dir)

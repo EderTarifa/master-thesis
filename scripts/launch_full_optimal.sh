@@ -7,13 +7,13 @@ set -euo pipefail
 export LC_ALL=C
 export LANG=C
 
-JOBS="${1:-15}"
+JOBS="${1:-8}"
 CONFIG="${2:-src/configs/full_optimal.yaml}"
-RUN_NAME="full_optimal"
+RUN_NAME="rebalance_frec/every_21" # Debe coincidir con el valor de rebalance_every en run_one_rebalance_frec.py
 
-MARKETS=(DJIA SP50 IBEX)
-VARIANTS=(V0 V4) # Telemetry version # VARIANTS=(V0 V1 V2 V3 V4)
-SEEDS=(5 6 7 8 9) #SEEDS=(0 1 2 3 4 5 6 7 8 9)
+MARKETS=(DJIA) #MARKETS=(DJIA SP50 IBEX)
+VARIANTS=(V4) #VARIANTS=(V0 V4) # Telemetry version # VARIANTS=(V0 V1 V2 V3 V4)
+SEEDS=(0 1 2 3 4) #SEEDS=(5 6 7 8 9) #SEEDS=(0 1 2 3 4 5 6 7 8 9)
 N_FOLDS=13
 
 TOTAL_TASKS=$((${#MARKETS[@]} * N_FOLDS * ${#VARIANTS[@]} * ${#SEEDS[@]}))
@@ -23,7 +23,7 @@ echo "Parallel jobs: ${JOBS}"
 echo "Total tasks: ${TOTAL_TASKS}"
 
 parallel --jobs "$JOBS" --bar --joblog "logs/${RUN_NAME}/parallel.log" \
-  python scripts/run_one_with_telemetry.py \
+  python scripts/run_one_rebalance_frec.py \
     --config "${CONFIG}" \
     --market {1} --fold {2} --variant {3} --seed {4} \
     --out "results/${RUN_NAME}" \

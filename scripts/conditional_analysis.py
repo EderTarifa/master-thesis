@@ -340,12 +340,12 @@ def main() -> None:
                                  args.treatment, args.baseline)
 
     # Repetir para V0 vs V3 (otro contraste interesante)
-    if {"V0", "V3"}.issubset(df["variant"].unique()):
+    """     if {"V0", "V3"}.issubset(df["variant"].unique()):
         print("\n" + "=" * 60)
         print("BONUS: V0 vs V3 (efecto del regularizador EVT puro)")
         print("=" * 60)
         paired_v3 = make_paired(df, "V0", "V3")
-        diff_by_regime(paired_v3, out_dir, "V0", "V3")
+        diff_by_regime(paired_v3, out_dir, "V0", "V3") """
 
     print(f"\nAll outputs in {out_dir}")
 

@@ -228,7 +228,7 @@ def main():
         if met not in df.columns:
             print(f"  skip {met} (column absent)")
             continue
-        out_svg = out_dir / f"curve_{met}.svg"
+        out_svg = out_dir / f"curve_{met}.png"
         refs = None
         if met == "approx_kl_per_dim":
             refs = kl_refs

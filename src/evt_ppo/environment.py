@@ -2,18 +2,32 @@
 Gymnasium environment for long-only portfolio management.
 
 State : float32 vector (see features.build_state).
-Action: float32 vector in R^N; converted to portfolio weights on the
+Action: float32 vector in R^N; converted to TARGET portfolio weights on the
         unit simplex via softmax (long-only, fully invested).
 Reward: per-step reward as configured (see reward.compute_reward).
 
-Episode dynamics:
-    - At step t the agent observes state s_t and chooses raw action a_t.
-    - Action is mapped to weights w_t = softmax(a_t).
-    - Transaction cost: c * sum |w_t - w_{t-1}| is deducted from the value.
-    - Portfolio is held until t+1, when returns r_{t+1} are realised:
-        V_{t+1} = V_t * (1 + w_t @ R_{t+1}) - cost
-      where R_{t+1} are simple returns (computed from log-returns).
-    - Drawdown is updated, reward is computed.
+Episode dynamics (with configurable rebalancing frequency):
+    - At step t the agent observes state s_t and chooses raw action a_t,
+      mapped to TARGET weights  w_target = softmax(a_t).
+    - The portfolio only REBALANCES towards w_target every `rebalance_every`
+      steps. On a rebalancing step the held weights are set to w_target and a
+      transaction cost  c * sum |w_target - w_held|  is charged. On the other
+      steps the action is ignored and the portfolio is simply HELD.
+    - Whether or not it rebalanced, returns R_{t+1} are realised:
+        V_{t+1} = V_t * (1 + w_eff @ R_{t+1}) * (1 - cost)
+      where w_eff are the weights actually held over the period and R_{t+1}
+      are simple returns (computed from log-returns).
+    - Between rebalances the held weights DRIFT with the market:
+        w_i <- w_i (1 + R_i) / sum_j w_j (1 + R_j),
+      so the turnover on the next rebalancing step is measured against the
+      drifted weights (this also makes transaction costs drift-aware).
+    - Drawdown is updated and the reward is computed every step on the
+      (possibly drifting) portfolio, so the daily reward / EVT machinery is
+      unchanged: only the trading frequency changes.
+
+Setting rebalance_every = 1 recovers daily rebalancing (with drift-aware
+cost accounting). Larger values (5 = weekly, 21 = monthly) reduce turnover
+and transaction-cost drag.
 
 Resetting samples a starting index uniformly within the allowed range,
 giving the agent a fresh trajectory.
@@ -39,6 +53,8 @@ class EnvConfig:
     transaction_cost: float = 0.0010      # 10 bps per unit turnover (one-way)
     initial_value: float = 1.0            # starting portfolio value (normalised)
     max_episode_length: int = 252         # one trading year
+    rebalance_every: int = 1              # trading days between rebalances
+                                          # (1 = daily, 5 = weekly, 21 = monthly)
     state_cfg: StateConfig = field(default_factory=StateConfig)
     reward_cfg: RewardConfig = field(default_factory=RewardConfig)
     random_starts: bool = True            # sample episode start uniformly
@@ -144,20 +160,27 @@ class PortfolioEnv(gym.Env):
         if action.shape[0] != self.N:
             raise ValueError(f"Action must have {self.N} elements.")
 
-        # Map raw action to simplex via softmax (long-only, fully invested).
+        # Map raw action to TARGET weights on the simplex via softmax.
         # We center first to avoid numerical issues with large logits.
         a = action - action.max()
-        new_weights = np.exp(a)
-        new_weights = new_weights / new_weights.sum()
+        target_weights = np.exp(a)
+        target_weights = target_weights / target_weights.sum()
 
-        # Transaction cost based on absolute change in weights.
-        turnover = np.abs(new_weights - self.weights).sum()
+        # Rebalance only every `rebalance_every` steps; otherwise hold & drift.
+        k = max(1, int(self.cfg.rebalance_every))
+        is_rebalance = (self.steps_taken % k == 0)
+        if is_rebalance:
+            effective_weights = target_weights
+            turnover = float(np.abs(effective_weights - self.weights).sum())
+        else:
+            effective_weights = self.weights      # hold current (drifted) weights
+            turnover = 0.0
         cost = self.cfg.transaction_cost * turnover
 
-        # Realise returns at the next time index.
+        # Realise returns at the next time index with the weights actually held.
         prev_value = self.value
         next_simple_returns = self.simple_returns[self.t + 1]
-        portfolio_simple_return = float(new_weights @ next_simple_returns)
+        portfolio_simple_return = float(effective_weights @ next_simple_returns)
         # Apply turnover cost as a fractional reduction.
         new_value = prev_value * (1.0 + portfolio_simple_return) * (1.0 - cost)
         # Net log-return (post-cost).
@@ -167,15 +190,23 @@ class PortfolioEnv(gym.Env):
             net_log_return = -10.0  # severe penalty if value collapses
             new_value = max(new_value, 1e-9)
 
+        # Drift the held weights by the realised returns for the next period:
+        #   w_i <- w_i (1 + R_i) / sum_j w_j (1 + R_j)
+        gross = effective_weights * (1.0 + next_simple_returns)
+        denom = float(gross.sum())
+        if denom > 0:
+            self.weights = (gross / denom).astype(np.float32)
+        else:
+            self.weights = effective_weights.astype(np.float32)
+
         self.value = new_value
-        self.weights = new_weights
         self.value_history.append(self.value)
         self.portfolio_log_returns.append(net_log_return)
 
         # Update drawdown.
         new_dd = current_drawdown(np.asarray(self.value_history))
         self.dd_history.append(new_dd)
-        
+
         # Después de actualizar self.dd_history y antes de compute_reward:
         if self.cfg.reward_cfg.variant in ("V3", "V4"):
             if self.steps_taken - self._cached_step >= self.cfg.reward_cfg.evt_recompute_every:
@@ -206,8 +237,9 @@ class PortfolioEnv(gym.Env):
             "drawdown": new_dd,
             "weights": self.weights.copy(),
             "turnover": float(turnover),
+            "rebalanced": bool(is_rebalance),
             "log_return_net": net_log_return,
-            **{f"reward/{k}": v for k, v in components.items()},
+            **{f"reward/{k_}": v for k_, v in components.items()},
         }
         return self._observation(), float(reward), terminated, truncated, info
 
